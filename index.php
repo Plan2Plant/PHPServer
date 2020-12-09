@@ -8,7 +8,8 @@ include ("config.php");
     // output data of each row
     while($row = $result->fetch_assoc()) {
       ?>
-        var marker = L.marker([<?php echo $row['latitude'];?>, <?php echo $row['longitude'];?>]).addTo(mymap);
+        var marker<?php echo $i; ?> = L.marker([<?php echo $row['latitude'];?>, <?php echo $row['longitude'];?>],{title:"marker_2"}).addTo(mymap).bindPopup("<b><?php echo $row['name'];?></b><br /><a href='area.php?id=<?php echo $row['id'];?>'>Show Map</a>").openPopup();
+
         <?php
         $i++;
       
@@ -34,8 +35,8 @@ include ("config.php");
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
     <script src='//api.tiles.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.3.1/leaflet-omnivore.min.js'></script>
-    <script src='https://api.tiles.mapbox.com/mapbox.js/v1.6.1/mapbox.js'></script>
-    <link href='https://api.tiles.mapbox.com/mapbox.js/v1.6.1/mapbox.css' rel='stylesheet' />
+    <!-- <script src='https://api.tiles.mapbox.com/mapbox.js/v1.6.1/mapbox.js'></script> -->
+    <!-- <link href='https://api.tiles.mapbox.com/mapbox.js/v1.6.1/mapbox.css' rel='stylesheet' /> -->
 
     <style>
       .bd-placeholder-img {
@@ -132,30 +133,21 @@ include ("config.php");
                                                     });
                    }
                    }); /***  end of hack ***/
-          var mymap = L.map('mapid').setView([32.63321480708429, 35.53948171356924], 13);
-          var popup = L.popup();
+          var mymap = L.map('mapid').setView([32.63321480708429, 35.53948171356924], 12);
           L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoicW5peHNhbSIsImEiOiJja2lna3pxZHYwNDEzMndubGRnOTNub21wIn0.NEjyfTZHGqTLJ0BGsOcXtA', {
-              attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-              maxZoom: 18,
-              id: 'mapbox/streets-v11',
-              tileSize: 512,
-              zoomOffset: -1,
-              accessToken: 'your.mapbox.access.token'
-          }).addTo(mymap);
-
+  maxZoom: 13,
+    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' +
+      'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+    id: 'mapbox/streets-v11',
+    tileSize: 512,
+    zoomOffset: -1
+  }).addTo(mymap);
           // var marker = L.marker([31.793234, 34.642317], { elevation: 260.0, title: "Transamerica Pyramid" }).addTo(mymap);
           // marker.bindPopup("<b>Hello world!</b><br>I am a popup.");
+          var popup = L.popup();
 
           <?php getAreas($conn); ?>
           omnivore.kml('kml/themap.kml').addTo(mymap);
-          function onMapClick(e) {
-              alert("You clicked the map at " + e.latlng);
-          }
-
-          // mymap.on('click', onMapClick);
-          marker.on('click', function(leafletEvent) {
-            alert(leafletEvent.latlng);
-          });
         </script>
 
 </body>
