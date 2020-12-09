@@ -1,4 +1,9 @@
 <?php
+if (isset($_GET['list'])) {
+  if ($_GET['list']="list") {
+    header('Location: statistic-list.php');
+  }
+}
 include ("config.php");
 function randomNum () {
   $min=1;
