@@ -137,7 +137,16 @@ $data = getData($conn, $id);
             <li><strong style="font-size:15px;">Longitude: </strong><small style="font-size:15px;"><?php echo $data['longitude'] ?></small></li>
             <li><strong style="font-size:15px;">Altitude: </strong><small style="font-size:15px;"><?php echo $data['altitude'] ?></small></li>
           </ul>
-          <center><button class="btn btn-block btn-primary" data-toggle="collapse" href="#collapseExample" style="width:50%">PLAN</button></center>
+          <center>
+            <div class="row">
+              <div class="col-md-6">
+                <button class="btn btn-block btn-primary" data-toggle="collapse" href="#collapseExample" style="">PLAN</button>
+              </div>
+              <div class="col-md-6">
+                <button onclick="window.location.href='statistic.php?id=<?php echo $data['id']; ?>&type=Banana'" class="btn btn-block btn-danger" style="">Statistics</button>
+              </div>
+            </div>
+          </center>
 
             <div class="collapse" id="collapseExample">
             <div class="card card-body" style="margin-top:15px;">
