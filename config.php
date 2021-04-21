@@ -1,6 +1,10 @@
 <?php 
+$website_title = "Plan2Plant";
+
+$jsonfilelocation = "/var/www/html/plan2plant/lib/"."stagesData.json";
+// == DataBase Config ==
 $servername = "localhost";
-$username = "root";
+$username = "";
 $password = "";
 $dbname = "plan2plant";
 
@@ -12,4 +16,9 @@ if ($conn->connect_error) {
   die("Connection failed: " . $conn->connect_error);
 }
 
+// ==== DEBUG ====
+if (isset($_GET['getcwd'])) {
+	die(getcwd());
+}
+// ==== DEBUG ====
 ?>

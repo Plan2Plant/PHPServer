@@ -8,7 +8,7 @@ include ("config.php");
     // output data of each row
     while($row = $result->fetch_assoc()) {
       ?>
-        var marker<?php echo $i; ?> = L.marker([<?php echo $row['latitude'];?>, <?php echo $row['longitude'];?>],{title:"marker_2"}).addTo(mymap).bindPopup("<b><?php echo $row['name'];?></b><br />Soil: <b><?php echo $row['soil'];?></b><br> Avg.Temp: <b><?php echo $row['max_temp'];?></b><br> Status: <b><br>Current Growing: <font style='color:red;'>Bannana</font><br>  Stage: <font style='color:red;'>Bunch Filling</font></b><br>Harvest Date: <font style='color:green;'>2022/04/05</font><br><a class='ajax' data-id='<?php echo $row['id']; ?>'>Select</a>").openPopup();
+        var marker<?php echo $i; ?> = L.marker([<?php echo $row['latitude'];?>, <?php echo $row['longitude'];?>],{title:"marker_2"}).addTo(mymap).bindPopup("<b><?php echo $row['name'];?></b><br />Soil: <b><?php echo $row['soil'];?></b><br> Avg.Temp: <b><?php echo $row['max_temp'];?></b><br><a class='ajax' data-id='<?php echo $row['id']; ?>'>Select</a>").openPopup();
 
         <?php
         $i++;
@@ -53,8 +53,6 @@ include ("config.php");
 
     <!-- Bootstrap core CSS -->
     <link href="assets/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- TimeLine CSS -->
-    <link href="assets/dist/css/timeline.min.css" rel="stylesheet">
     <!-- DataTable CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/select/1.3.1/css/select.dataTables.min.css">
@@ -81,7 +79,7 @@ include ("config.php");
         }
       }
       #mapid {
-        height: 60vh !important;
+        height: 34vh !important;
         width: 100%;
         margin-bottom: 13px;
       }
@@ -112,7 +110,7 @@ include ("config.php");
 
 <div class="container-fluid">
   <div class="row">
-    <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse" style="">
+    <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
       <div class="sidebar-sticky pt-3">
         <ul class="nav flex-column">
           <li class="nav-item">
@@ -142,41 +140,15 @@ include ("config.php");
       </div>
     </nav>
 
-    <!-- <main role="main" class="col-md-12 ml-sm-auto col-lg-12 px-md-4"> -->
-    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4" style="padding:0px">
+    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
       <div style="position: absolute; inset: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;" class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div></div><div class="chartjs-size-monitor-shrink" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:200%;height:200%;left:0; top:0"></div></div></div>
-      <!-- <div id="mapid"></div> -->
-      <h1 style="margin-top:10px;"><center>Plan to Plant Project</center></h1>
-      <div class="row" style="width: 96%;margin: 0 auto; margin-top:5rem;">
-        <!-- Map List With Map  -->
+      <div id="mapid"></div>
+      <div class="row">
         <div class="col-md-6">
-          <div id="accordion">
           <div class="card">
-            <div class="card-header" id="headingOne">
-              <h5 class="mb-0">
-                <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                  Map (Google Map)
-                </button>
-              </h5>
-            </div>
-
-            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
-              <div class="card-body" style="padding:0px;">
-                <div id="mapid"></div>
-              </div>
-            </div>
-          </div>
-          <div class="card">
-            <div class="card-header bg-primary" id="headingTwo">
-              <h5 class="mb-0">
-                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                  <font style="color:white; font-size:25px;"><b>Map List</b></font>
-                </button>
-              </h5>
-            </div>
-            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
-              <div class="card-body">
-                          <!--     The Data Table     -->
+            <h5 class="card-header bg-primary" style="color:white;">Map List</h5>
+            <div class="card-body">
+          <!--     The Data Table     -->
         <form id="arealist-form" action="/path/to/your/script" method="POST">
           <table id="example" class="table table-striped table-bordered" style="width:100%">
                   <thead>
@@ -197,12 +169,9 @@ include ("config.php");
           <button type="submit" id="submit_form" class="btn btn-success">Run <strong>Growing Time Forecast</strong></button>
           </form>
           <!--     The Data Table     -->
-              </div>
             </div>
           </div>
         </div>
-      </div>
-        <!-- Map List With Map -->
         <div class="col-md-6">
           <div class="card">
             <h5 class="card-header">Result</h5>
@@ -212,6 +181,8 @@ include ("config.php");
           </div>
         </div>
       </div>
+
+
 
     </main>
   </div>
@@ -223,8 +194,6 @@ include ("config.php");
         <script src="https://cdn.datatables.net/1.10.23/js/dataTables.bootstrap4.min.js"></script>
         <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script> -->
         <script src="assets/dist/js/dashboard.js"></script>
-        <!-- === jQuery TimeLine === -->
-        <script src="assets/dist/js/timeline.min.js"></script>
         <script>
         L.Map = L.Map.extend({
                    openPopup: function(popup) {
@@ -240,7 +209,7 @@ include ("config.php");
           L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoicW5peHNhbSIsImEiOiJja2lna3pxZHYwNDEzMndubGRnOTNub21wIn0.NEjyfTZHGqTLJ0BGsOcXtA', {
   maxZoom: 13,
     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' +
-      'Imagery Â© <a href="https://www.mapbox.com/">Mapbox</a>',
+      'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
     id: 'mapbox/streets-v11',
     tileSize: 512,
     zoomOffset: -1
@@ -317,15 +286,5 @@ include ("config.php");
               });
           });
         </script>
-        <!-- ==== TimeLine ==== -->
-        <script>
-      $(document).ready(function(){
-       jQuery('.timeline').timeline({
-        // mode: 'horizontal',
-        // visibleItems: 4
-        //Remove this comment for see Timeline in Horizontal Format otherwise it will display in Vertical Direction Timeline
-       });
-      });
-    </script>
 </body>
 </html>
