@@ -1,69 +1,35 @@
 <?php
-include ("config.php");
-  function getAreas ($conn) { // Return The Areas
-  $sql = "SELECT * FROM area";
-  $result = $conn->query($sql);
-  $i=0;
-  if ($result->num_rows > 0) {
-    // output data of each row
-    while($row = $result->fetch_assoc()) {
-      ?>
-        var marker<?php echo $i; ?> = L.marker([<?php echo $row['latitude'];?>, <?php echo $row['longitude'];?>],{title:"marker_2"}).addTo(mymap).bindPopup("<b><?php echo $row['name'];?></b><br />Soil: <b><?php echo $row['soil'];?></b><br> Avg.Temp: <b><?php echo $row['max_temp'];?></b><br> Status: <b><br>Current Growing: <font style='color:red;'>Bannana</font><br>  Stage: <font style='color:red;'>Bunch Filling</font></b><br>Harvest Date: <font style='color:green;'>2022/04/05</font><br><a class='ajax' data-id='<?php echo $row['id']; ?>'>Select</a>").openPopup();
-
-        <?php
-        $i++;
-      
-    }
-  } else {
-    echo "0 results";
-  }
-}
-  function getAreasList ($conn) {
-  $sql = "SELECT * FROM area";
-  $result = $conn->query($sql);
-  $i=0;
-  if ($result->num_rows > 0) {
-    while($row = $result->fetch_assoc()) {
-      ?>
-        <tr>
-            <td><input type="checkbox" id="flexCheckDefault<?php echo $row['id']; ?>" name="areas[]" class="checkBoxClass" value="<?php echo $row['id']; ?>"></td>
-            <td><a class="ajax" data-id="<?php echo $row['id']; ?>"><?php echo $row['name']; ?></a></td>
-            <td><a class="ajax" data-id="<?php echo $row['id']; ?>"><?php echo $row['soil']; ?></a></td>
-            <td><a class="ajax" data-id="<?php echo $row['id']; ?>"><?php echo $row['max_temp']; ?></a></td>
-            <td><a class="ajax" data-id="<?php echo $row['id']; ?>"><?php echo "WaterMelon"; ?></a></td>
-
-        </tr>
-        <?php
-      
-    }
-  } else {
-    echo "0 results";
-  }
-}
+include("config.php");
+if (isset($_GET['page'])) {
+  $page = $_GET['page'];
+} else $page="main";
 ?>
-<html lang="en"><head>
+<!doctype html>
+<html lang="en">
+  <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
-    <meta name="generator" content="Jekyll v4.1.1">
-    <title><?php echo $website_title; ?></title>
+    <meta name="generator" content="Hugo 0.83.1">
+    <title><?php echo $site_name; ?></title>
 
-    <link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/dashboard/">
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/carousel/">
+
+    
 
     <!-- Bootstrap core CSS -->
-    <link href="assets/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- TimeLine CSS -->
-    <link href="assets/dist/css/timeline.min.css" rel="stylesheet">
-    <!-- DataTable CSS -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/dataTables.bootstrap4.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/select/1.3.1/css/select.dataTables.min.css">
-    <!-- OpenStreet Map -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
-    <script src='//api.tiles.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.3.1/leaflet-omnivore.min.js'></script>
-    <!-- <script src='https://api.tiles.mapbox.com/mapbox.js/v1.6.1/mapbox.js'></script> -->
-    <!-- <link href='https://api.tiles.mapbox.com/mapbox.js/v1.6.1/mapbox.css' rel='stylesheet' /> -->
+<link href="./dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+
+    <!-- Favicons -->
+<link rel="apple-touch-icon" href="/docs/5.0/assets/img/favicons/apple-touch-icon.png" sizes="180x180">
+<link rel="icon" href="/docs/5.0/assets/img/favicons/favicon-32x32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="/docs/5.0/assets/img/favicons/favicon-16x16.png" sizes="16x16" type="image/png">
+<link rel="manifest" href="/docs/5.0/assets/img/favicons/manifest.json">
+<link rel="mask-icon" href="/docs/5.0/assets/img/favicons/safari-pinned-tab.svg" color="#7952b3">
+<link rel="icon" href="/docs/5.0/assets/img/favicons/favicon.ico">
+<meta name="theme-color" content="#7952b3">
+
 
     <style>
       .bd-placeholder-img {
@@ -71,7 +37,6 @@ include ("config.php");
         text-anchor: middle;
         -webkit-user-select: none;
         -moz-user-select: none;
-        -ms-user-select: none;
         user-select: none;
       }
 
@@ -80,252 +45,212 @@ include ("config.php");
           font-size: 3.5rem;
         }
       }
-      #mapid {
-        height: 60vh !important;
+      .dashboard-img {
         width: 100%;
-        margin-bottom: 13px;
-      }
-      .ajax {
-        cursor: pointer;
+        height: 278px;
       }
     </style>
+
+    
     <!-- Custom styles for this template -->
-    <link href="assets/dist/css/dashboard.css" rel="stylesheet">
-  <style type="text/css">/* Chart.js */
-    @-webkit-keyframes chartjs-render-animation{from{opacity:0.99}to{opacity:1}}@keyframes chartjs-render-animation{from{opacity:0.99}to{opacity:1}}.chartjs-render-monitor{-webkit-animation:chartjs-render-animation 0.001s;animation:chartjs-render-animation 0.001s;}
-    #mapid { height: 80vh; }
-  </style>
-</head>
- <body>
-    <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-  <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="index.php"><?php echo $website_title; ?></a>
-  <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse" data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <!-- <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search"> -->
-  <ul class="navbar-nav px-3">
-    <li class="nav-item text-nowrap" style="display:none;">
-      <a class="nav-link" href="#">Sign out</a>
-    </li>
-  </ul>
-</nav>
+    <link href="./dist/css/carousel.css" rel="stylesheet">
+  </head>
+  <body>
 
-<div class="container-fluid">
-  <div class="row">
-    <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse" style="">
-      <div class="sidebar-sticky pt-3">
-        <ul class="nav flex-column">
-          <li class="nav-item">
-            <a class="nav-link active" href="#">
-              <span data-feather="home"></span>
-              Map <span class="sr-only">(current)</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="index.php">
-              <span data-feather="map"></span>
-              Map
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="statistic.php?list=list">
-              <span data-feather="trending-up"></span>
-              Statistic
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">
-              <span data-feather="users"></span>
-              About
-            </a>
+<?php include("./pages/header.php"); ?>
 
-      </div>
-    </nav>
+<main>
 
-    <!-- <main role="main" class="col-md-12 ml-sm-auto col-lg-12 px-md-4"> -->
-    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4" style="padding:0px">
-      <div style="position: absolute; inset: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;" class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div></div><div class="chartjs-size-monitor-shrink" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:200%;height:200%;left:0; top:0"></div></div></div>
-      <!-- <div id="mapid"></div> -->
-      <h1 style="margin-top:10px;"><center>Plan to Plant Project</center></h1>
-      <div class="row" style="width: 96%;margin: 0 auto; margin-top:5rem;">
-        <!-- Map List With Map  -->
-        <div class="col-md-6">
-          <div id="accordion">
-          <div class="card">
-            <div class="card-header" id="headingOne">
-              <h5 class="mb-0">
-                <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                  Map (Google Map)
-                </button>
-              </h5>
-            </div>
+      <div id="myCarousel" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+      <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+      <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+      <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+    </div>
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img src="./dist/images/seedlingshands-1000.jpg" alt="">
 
-            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
-              <div class="card-body" style="padding:0px;">
-                <div id="mapid"></div>
-              </div>
-            </div>
-          </div>
-          <div class="card">
-            <div class="card-header bg-primary" id="headingTwo">
-              <h5 class="mb-0">
-                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                  <font style="color:white; font-size:25px;"><b>Map List</b></font>
-                </button>
-              </h5>
-            </div>
-            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
-              <div class="card-body">
-                          <!--     The Data Table     -->
-        <form id="arealist-form" action="/path/to/your/script" method="POST">
-          <table id="example" class="table table-striped table-bordered" style="width:100%">
-                  <thead>
-                      <tr>
-                          <th id="first_checkbox"><input type="checkbox" id="checkAll" style="cursor: pointer; color:blue;"></input></th>
-                          <th>Name</th>
-                          <th>Texture</th>
-                          <th>Monthly Average Temperature</th>
-                          <th>Previous Growth</th>
-                      </tr>
-                  </thead>
-                  <tbody>
-                    <?php getAreasList($conn); ?>
-                  </tbody>
-                  </tfoot>
-              </table>
-            <pre id="example-console"></pre>
-          <button type="submit" id="submit_form" class="btn btn-success">Run <strong>Growing Time Forecast</strong></button>
-          </form>
-          <!--     The Data Table     -->
-              </div>
-            </div>
+        <div class="container">
+          <div class="carousel-caption text-start">
+            <h1>Plan2Plant</h1>
+            <p>Solution for every farmer.</p>
+            <p><a class="btn btn-lg btn-primary" href="calendar.php">Show Calendar</a></p>
           </div>
         </div>
       </div>
-        <!-- Map List With Map -->
-        <div class="col-md-6">
-          <div class="card">
-            <h5 class="card-header">Result</h5>
-            <div class="card-body">
-              <div id="myDiv"><h1><center>Please Select Map</center></h1></div>
-            </div>
+      <div class="carousel-item">
+        <img src="./dist/images/Plant-Seeds-1450x700-1.jpg.webp" alt="">
+
+        <div class="container">
+          <div class="carousel-caption">
+            <h1>Plan2Plant</h1>
+            <p>analyzes the unique customer, crop, environment & markets- planning for the best fitted full value chain</p>
+            <p><a class="btn btn-lg btn-primary" href="planning.php">Start Planning</a></p>
           </div>
         </div>
       </div>
+      <div class="carousel-item">
+        <img src="./dist/images/2018_cp_blog_lead_answerplot_aerial.png" alt="">
 
-    </main>
+        <div class="container">
+          <div class="carousel-caption text-end">
+            <h1>Plan2Plant</h1>
+            <p>Start Planning Today.</p>
+            <p><a class="btn btn-lg btn-primary" href="map.php">Browse map</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
   </div>
-</div>
-<script src="https://code.jquery.com/jquery-3.5.1.min.js" crossorigin="anonymous"></script>
-      <script>window.jQuery || document.write('<script src="assets/js/vendor/jquery.min.js"><\/script>')</script><script src="assets/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js"></script>
-        <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
-        <script src="https://cdn.datatables.net/1.10.23/js/dataTables.bootstrap4.min.js"></script>
-        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script> -->
-        <script src="assets/dist/js/dashboard.js"></script>
-        <!-- === jQuery TimeLine === -->
-        <script src="assets/dist/js/timeline.min.js"></script>
-        <script>
-        L.Map = L.Map.extend({
-                   openPopup: function(popup) {
-                   //        this.closePopup();  // just comment this
-                   this._popup = popup;
 
-                   return this.addLayer(popup).fire('popupopen', {
-                                                    popup: this._popup
-                                                    });
-                   }
-                   }); /***  end of hack ***/
-          var mymap = L.map('mapid').setView([32.63321480708429, 35.53948171356924], 13);
-          L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoicW5peHNhbSIsImEiOiJja2lna3pxZHYwNDEzMndubGRnOTNub21wIn0.NEjyfTZHGqTLJ0BGsOcXtA', {
-  maxZoom: 13,
-    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' +
-      'Imagery Â© <a href="https://www.mapbox.com/">Mapbox</a>',
-    id: 'mapbox/streets-v11',
-    tileSize: 512,
-    zoomOffset: -1
-  }).addTo(mymap);
-          // var marker = L.marker([31.793234, 34.642317], { elevation: 260.0, title: "Transamerica Pyramid" }).addTo(mymap);
-          // marker.bindPopup("<b>Hello world!</b><br>I am a popup.");
-          var popup = L.popup();
 
-          <?php getAreas($conn); ?>
-          omnivore.kml('kml/themap.kml').addTo(mymap);
-        </script>
-        <script>
-        $( document ).ready(function() {
-            $(document).on('click', 'a.ajax', function(){
-                $('#myDiv').slideUp("fast").html('<div class="text-center" style=""><div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div></div>'); // Loading Status
-                var el = $(this);
-                $.ajax({
-                    url: 'lib/front/area.php',
-                    data: {id: el.data('id')},
-                }).done(function(response){
-                    $('#myDiv').slideDown(200, function() {
-                    $("#myDiv").html(response); // Adter The Load
-                    $("#myDiv").slideDown();
-                  });
-                });
-                
-                return false;
-            });
-        });
-        </script>
-    <!-- ============= Data Table =============== -->
-        <script>
-          $(document).ready(function (){   
-              $('#example').DataTable();
-          });
-        </script>   
-        <script>
-        $( document ).ready(function() {
-         // $("#checkAll").click(function () {
-         //     $('.flexCheckDefault').not(this).prop('checked', this.checked);
-             // $(".checkBoxClass").prop('checked', $(this).prop('checked'));
-         // });
+  <!-- Marketing messaging and featurettes
+  ================================================== -->
+  <!-- Wrap the rest of the page in another container to center all the content. -->
 
-          // $("#checkAll").change(function(){
-          //   $(".flexCheckDefault").prop('checked', false);
-          // });
-        
-          $('#checkAll').change(function() {
-            // var checkboxes = $(".flexCheckDefault");
-            // var checkboxes = $(this).closest('.flexCheckDefault').find(':checkbox');
-            // alert(checkboxes);
-            // checkboxes.prop('checked', $(this).is(':checked'));
-                    $("input[type=checkbox]").prop('checked', $(this).prop('checked'));
-          });
-        });
-        </script>
-        <script>
-          $(document).ready(function(){
-              $("#arealist-form").on("submit", function(event){
-                $('#myDiv').slideUp("fast").html('<div class="text-center" style=""><div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div></div>'); // Loading Status
-                  event.preventDefault();
-           
-                  var formValues= $(this).serialize();
-           
-                  $.post("lib/growing_time.php", formValues, function(data){
-                      // Display the returned data in browser
-                      // alert(data);
-                      // $("#myDiv").html(data);
-                      $('#myDiv').slideDown(200, function() {
-                      $("#myDiv").html(data); // Adter The Load
-                      $("#myDiv").slideDown();
-                  });
-                  });
-              });
-          });
-        </script>
-        <!-- ==== TimeLine ==== -->
-        <script>
-      $(document).ready(function(){
-       jQuery('.timeline').timeline({
-        // mode: 'horizontal',
-        // visibleItems: 4
-        //Remove this comment for see Timeline in Horizontal Format otherwise it will display in Vertical Direction Timeline
-       });
-      });
-    </script>
-</body>
+  <div class="container marketing">
+
+    <!-- Three columns of text below the carousel -->
+    <div class="row">
+<section class="col-lg-12 connectedSortable ui-sortable">
+            <!-- Custom tabs (Charts with tabs)-->
+   
+            <!-- /.card -->
+
+            <!-- DIRECT CHAT -->
+
+            <!--/.direct-chat -->
+
+            <!-- Dashboard -->
+
+              <div class="row row-cols-1 row-cols-md-3 g-4">
+            <div class="col">
+            <a href="calendar.php">
+              <div class="card">
+                <center><img src="https://i.pinimg.com/originals/c8/4f/fc/c84ffc99f868d4585e8b604709dcca75.png" class="dashboard-img card-img-top" alt="..."></center>
+                <div class="card-body">
+                  <div class="d-grid gap-2">
+                    <button class="btn btn-primary" type="button">Calendar</button>
+                  </div>
+                </div>
+              </div>
+            </a>
+            </div>
+            <div class="col">
+              <a href="map.php">
+              <div class="card">
+                <center><img src="https://img.freepik.com/free-vector/world-map-with-countries-borders_47243-900.jpg?size=626&amp;ext=jpg" class="dashboard-img card-img-top" alt="..."></center>
+                <div class="card-body">
+                  <center>
+                  <div class="d-grid gap-2">
+                    <button class="btn btn-info" type="button">Map</button>
+                  </div>
+                </center></div>
+              </div>
+              </a>
+            </div>
+            <div class="col">
+              <a href="dashboard.php">
+              <div class="card">
+                <center><img src="https://www.pixeden.com/media/k2/galleries/1039/001-dashboard-infographic-chart-graphics-vector-pack.jpg" class="dashboard-img card-img-top" alt="..."></center>
+                <div class="card-body">
+                  <div class="d-grid gap-2">
+                    <button class="btn btn-light" type="button">Dashboard</button>
+                  </div>
+                </div>
+              </div>
+            </a>
+            </div>
+            <div class="col">
+              <a href="planning.php">
+              <div class="card">
+                <center><img src="https://assets.materialup.com/uploads/900c6291-bc21-41b9-93fb-2d4b495de051/preview.jpg" class="dashboard-img card-img-top" alt="..."></center>
+                <div class="card-body">
+                  <div class="d-grid gap-2">
+                    <button class="btn btn-primary" type="button">Planning</button>
+                  </div>
+                </div>
+              </div>
+              </a>
+            </div>
+              <div class="col">
+              <div class="card">
+                <center><img src="https://image.freepik.com/free-vector/message-notification-background_23-2147671665.jpg" class="dashboard-img card-img-top" alt="..."></center>
+                <div class="card-body">
+                  <div class="d-grid gap-2">
+                    <button class="btn btn-warning" type="button">Notification</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+              <div class="col">
+              <div class="card">
+                <center><img src="https://st3.depositphotos.com/1373020/19444/v/1600/depositphotos_194440412-stock-illustration-realistic-notebook-vector.jpg" class="dashboard-img card-img-top" alt="..."></center>
+                <div class="card-body">
+                  <div class="d-grid gap-2">
+                    <button class="btn btn-success" type="button">Draft</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+              <div class="col">
+              <div class="card">
+                <center><img src="https://img.freepik.com/free-vector/popular-programming-languange_25156-21.jpg?size=626&amp;ext=jpg" class="dashboard-img card-img-top" alt="..."></center>
+                <div class="card-body">
+                  <div class="d-grid gap-2">
+                    <button class="btn btn-danger" type="button">Reports</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+              <div class="col">
+              <div class="card">
+                <center><img src="https://img.freepik.com/free-vector/processing-concept-illustration_114360-410.jpg?size=626&amp;ext=jpg" class="dashboard-img card-img-top" alt="..."></center>
+                <div class="card-body">
+                  <div class="d-grid gap-2">
+                    <button class="btn btn-secondary" type="button">Production</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+              <div class="col">
+              <div class="card">
+                <center><img src="https://image.freepik.com/free-vector/peer-peer-insurance-model-collaborative-consumption-policyholders-cooperation-p2p-digital-insurers-service-partners-sharing-liability-insurance_335657-2538.jpg" class="dashboard-img card-img-top" alt="..."></center>
+                <div class="card-body">
+                  <div class="d-grid gap-2">
+                    <button class="btn btn-danger" type="button">P2P Community</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+            <!-- /.card -->
+          </section>
+
+
+    <!-- START THE FEATURETTES -->
+
+
+    <!-- /END THE FEATURETTES -->
+
+  </div><!-- /.container -->
+<!-- ENd Main ---->
+
+  <!-- FOOTER -->
+</main>
+
+
+    <script src="./dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+      
+  </body>
 </html>
